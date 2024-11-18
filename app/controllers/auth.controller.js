@@ -1,121 +1,92 @@
-const config = require("../config/auth.config");
-const db = require("../models");
-const User = db.user;
-const Role = db.role;
+const User = require("../models/user.model"); // Adjust the path as necessary
 
-var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
-
-exports.signup = (req, res) => {
-  const user = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
-  });
-
-  user.save((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-
-    if (req.body.roles) {
-      Role.find(
-        {
-          name: { $in: req.body.roles },
-        },
-        (err, roles) => {
-          if (err) {
-            res.status(500).send({ message: err });
-            return;
-          }
-
-          user.roles = roles.map((role) => role._id);
-          user.save((err) => {
-            if (err) {
-              res.status(500).send({ message: err });
-              return;
-            }
-
-            res.send({ message: "User was registered successfully!" });
-          });
-        }
-      );
-    } else {
-      Role.findOne({ name: "user" }, (err, role) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-
-        user.roles = [role._id];
-        user.save((err) => {
-          if (err) {
-            res.status(500).send({ message: err });
-            return;
-          }
-
-          res.send({ message: "User was registered successfully!" });
-        });
-      });
-    }
-  });
+exports.allAccess = (req, res) => {
+  res.status(200).send("Public Content.");
 };
 
-exports.signin = (req, res) => {
-  User.findOne({
-    username: req.body.username,
-  })
-    .populate("roles", "-__v")
-    .exec((err, user) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-
-      if (!user) {
-        return res.status(404).send({ message: "User Not found." });
-      }
-
-      var passwordIsValid = bcrypt.compareSync(
-        req.body.password,
-        user.password
-      );
-
-      if (!passwordIsValid) {
-        return res.status(401).send({ message: "Invalid Password!" });
-      }
-
-      const token = jwt.sign({ id: user.id },
-                              config.secret,
-                              {
-                                algorithm: 'HS256',
-                                allowInsecureKeySizes: true,
-                                expiresIn: 86400, // 24 hours
-                              });
-
-      var authorities = [];
-
-      for (let i = 0; i < user.roles.length; i++) {
-        authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-      }
-
-      req.session.token = token;
-
-      res.status(200).send({
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        roles: authorities,
-      });
-    });
+exports.userBoard = (req, res) => {
+  res.status(200).send("User Content.");
 };
 
-exports.signout = async (req, res) => {
+exports.adminBoard = (req, res) => {
+  res.status(200).send("Admin Content.");
+};
+
+exports.moderatorBoard = (req, res) => {
+  res.status(200).send("Moderator Content.");
+};
+
+// Create a new user
+exports.createUser = async (req, res) => {
   try {
-    req.session = null;
-    return res.status(200).send({ message: "You've been signed out!" });
-  } catch (err) {
-    this.next(err);
+    const user = new User({
+      userID: req.body.userID,
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      roles: req.body.roles,
+      boardID: req.body.boardID,
+    });
+
+    const savedUser = await user.save();
+    res.status(201).json(savedUser);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get all users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().populate("roles").populate("boardID");
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get a single user by ID
+exports.getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+      .populate("roles")
+      .populate("boardID");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update a user
+exports.updateUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        userID: req.body.userID,
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        roles: req.body.roles,
+        boardID: req.body.boardID,
+      },
+      { new: true }
+    );
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Delete a user
+exports.deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
