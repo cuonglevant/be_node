@@ -1,10 +1,10 @@
-const express = require("express");
-const { verifyToken, isAdmin, isModerator } = require("../middlewares/authJwt"); // Adjust the path as necessary
-const cardController = require("../controllers/card.controller"); // Adjust the path as necessary
+import express from "express";
+import { verifyToken, isAdmin, isModerator } from "../middlewares/authJwt.js"; // Adjust the path as necessary
+import * as cardController from "../controllers/card.controller.js"; // Adjust the path as necessary
 
 const router = express.Router();
 
-module.exports = function (app) {
+export default function (app) {
   app.use((req, res, next) => {
     res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
     next();
@@ -30,4 +30,4 @@ module.exports = function (app) {
   );
 
   app.use("/api", router);
-};
+}

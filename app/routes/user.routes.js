@@ -1,12 +1,9 @@
-const { authJwt } = require("../middlewares");
-const controller = require("../controllers/user.controller");
+import { authJwt } from "../middlewares/index.js";
+import * as controller from "../controllers/user.controller.js";
 
-module.exports = function(app) {
-  app.use(function(req, res, next) {
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, Content-Type, Accept"
-    );
+export default function (app) {
+  app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
     next();
   });
 
@@ -25,4 +22,4 @@ module.exports = function(app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
-};
+}

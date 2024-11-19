@@ -1,92 +1,80 @@
-const User = require("../models/user.model"); // Adjust the path as necessary
+import db from "../models/index.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
-exports.allAccess = (req, res) => {
-  res.status(200).send("Public Content.");
-};
+const User = db.user;
+const Role = db.role;
 
-exports.userBoard = (req, res) => {
-  res.status(200).send("User Content.");
-};
-
-exports.adminBoard = (req, res) => {
-  res.status(200).send("Admin Content.");
-};
-
-exports.moderatorBoard = (req, res) => {
-  res.status(200).send("Moderator Content.");
-};
-
-// Create a new user
-exports.createUser = async (req, res) => {
+export const signup = async (req, res) => {
   try {
     const user = new User({
-      userID: req.body.userID,
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password,
-      roles: req.body.roles,
-      boardID: req.body.boardID,
+      password: bcrypt.hashSync(req.body.password, 8),
     });
 
     const savedUser = await user.save();
-    res.status(201).json(savedUser);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+
+    if (req.body.roles) {
+      const roles = await Role.find({ name: { $in: req.body.roles } });
+      savedUser.roles = roles.map((role) => role._id);
+      await savedUser.save();
+    } else {
+      const role = await Role.findOne({ name: "user" });
+      savedUser.roles = [role._id];
+      await savedUser.save();
+    }
+
+    res.send({ message: "User was registered successfully!" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
   }
 };
 
-// Get all users
-exports.getAllUsers = async (req, res) => {
+export const signin = async (req, res) => {
   try {
-    const users = await User.find().populate("roles").populate("boardID");
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Get a single user by ID
-exports.getUserById = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id)
-      .populate("roles")
-      .populate("boardID");
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Update a user
-exports.updateUser = async (req, res) => {
-  try {
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        userID: req.body.userID,
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        roles: req.body.roles,
-        boardID: req.body.boardID,
-      },
-      { new: true }
+    const user = await User.findOne({ username: req.body.username }).populate(
+      "roles",
+      "-__v"
     );
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+
+    if (!user) {
+      return res.status(404).send({ message: "User Not found." });
+    }
+
+    const passwordIsValid = bcrypt.compareSync(
+      req.body.password,
+      user.password
+    );
+
+    if (!passwordIsValid) {
+      return res.status(401).send({
+        accessToken: null,
+        message: "Invalid Password!",
+      });
+    }
+
+    const token = jwt.sign({ id: user.id }, process.env.SECRET, {
+      expiresIn: 86400, // 24 hours
+    });
+
+    res.status(200).send({
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      roles: user.roles.map((role) => "ROLE_" + role.name.toUpperCase()),
+      accessToken: token,
+    });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
   }
 };
 
-// Delete a user
-exports.deleteUser = async (req, res) => {
+export const signout = (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.status(200).json({ message: "User deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+    req.session = null;
+    res.status(200).send({ message: "You've been signed out!" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
   }
 };

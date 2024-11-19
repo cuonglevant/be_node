@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
-const config = require("../config/auth.config.js");
-const db = require("../models");
+import config from "../config/auth.config.js";
+import jwt from "jsonwebtoken";
+import db from "../models/index.js";
 const User = db.user;
 const Role = db.role;
 
@@ -60,10 +60,4 @@ const isModerator = async (req, res, next) => {
   }
 };
 
-const authJwt = {
-  verifyToken,
-  isAdmin,
-  isModerator,
-};
-
-module.exports = authJwt;
+export { verifyToken, isAdmin, isModerator };

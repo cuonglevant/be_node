@@ -1,3 +1,5 @@
-module.exports = {
-  secret: "bezkoder-secret-key"
+const config = {
+  secret: "cuong-levant",
 };
+
+export default config;

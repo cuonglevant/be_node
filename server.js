@@ -1,8 +1,11 @@
-const express = require("express");
-const cors = require("cors");
-const cookieSession = require("cookie-session");
+import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import cookieSession from "cookie-session";
+import mongoose from "mongoose";
+import Role from "./app/models/role.model.js"; // Adjust the path as necessary
 
-const dbConfig = require("./app/config/db.config");
+dotenv.config();
 
 const app = express();
 
@@ -23,39 +26,46 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cookieSession({
-    name: "bezkoder-session",
-    keys: ["COOKIE_SECRET"], // should use as secret environment variable
-    httpOnly: false,
+    name: "cuonglevant-session",
+    secret: process.env.COOKIE_SECRET, // Ensure you have COOKIE_SECRET in your .env file
+    httpOnly: true,
   })
 );
 
-const db = require("./app/models");
-const Role = db.role;
+// Set strictQuery option to suppress deprecation warning
+mongoose.set("strictQuery", true);
 
-db.mongoose
-  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+// Connect to MongoDB
+mongoose
+  .connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    ssl: true,
+    tlsAllowInvalidCertificates: true,
   })
   .then(() => {
-    console.log("Successfully connect to MongoDB.");
-    initial();
+    console.log("Successfully connected to MongoDB.");
+    initial(); // Initialize roles
   })
   .catch((err) => {
     console.error("Connection error", err);
     process.exit();
   });
 
-// simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
-});
+// Import routes
+import authRoutes from "./app/routes/auth.routes.js"; // Adjust the path as necessary
+import boardRoutes from "./app/routes/board.routes.js"; // Adjust the path as necessary
+import listRoutes from "./app/routes/list.routes.js"; // Adjust the path as necessary
+import historyRoutes from "./app/routes/history.routes.js"; // Adjust the path as necessary
+import cardRoutes from "./app/routes/card.routes.js"; // Adjust the path as necessary
 
-// routes
-require("./app/routes/auth.routes")(app);
-require("./app/routes/user.routes")(app);
+authRoutes(app);
+boardRoutes(app);
+listRoutes(app);
+historyRoutes(app);
+cardRoutes(app);
 
-// set port, listen for requests
+// Set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);

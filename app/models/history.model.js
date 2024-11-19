@@ -1,21 +1,22 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const History = mongoose.model(
-  "History",
-  new mongoose.Schema({
-    historyID: String,
-    historyDescription: String,
-    cardID: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Card",
-      },
-    ],
-    userID: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-  })
-);
+const historySchema = new mongoose.Schema({
+  historyID: String,
+  historyDescription: String,
+  cardID: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Card",
+    },
+  ],
+  userID: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+});
+
+const History = mongoose.model("History", historySchema);
+
+export default History;

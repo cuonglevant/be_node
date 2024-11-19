@@ -1,37 +1,33 @@
-const express = require("express");
-const { verifyToken, isAdmin, isModerator } = require("../middlewares/authJwt"); // Adjust the path as necessary
-const boardController = require("../controllers/board.controller"); // Adjust the path as necessary
+import express from "express";
+import { verifyToken, isAdmin, isModerator } from "../middlewares/authJwt.js"; // Adjust the path as necessary
+import * as listController from "../controllers/list.controller.js"; // Adjust the path as necessary
 
 const router = express.Router();
 
-module.exports = function (app) {
+export default function (app) {
   app.use((req, res, next) => {
     res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
     next();
   });
 
-  // Create a new board
-  router.post("/boards", [verifyToken, isAdmin], boardController.createBoard);
+  // Create a new list
+  router.post("/lists", [verifyToken, isAdmin], listController.createList);
 
-  // Get all boards
-  router.get("/boards", [verifyToken], boardController.getAllBoards);
+  // Get all lists
+  router.get("/lists", [verifyToken], listController.getAllLists);
 
-  // Get a single board by ID
-  router.get("/boards/:id", [verifyToken], boardController.getBoardById);
+  // Get a single list by ID
+  router.get("/lists/:id", [verifyToken], listController.getListById);
 
-  // Update a board
-  router.put(
-    "/boards/:id",
-    [verifyToken, isAdmin],
-    boardController.updateBoard
-  );
+  // Update a list
+  router.put("/lists/:id", [verifyToken, isAdmin], listController.updateList);
 
-  // Delete a board
+  // Delete a list
   router.delete(
-    "/boards/:id",
+    "/lists/:id",
     [verifyToken, isAdmin],
-    boardController.deleteBoard
+    listController.deleteList
   );
 
   app.use("/api", router);
-};
+}

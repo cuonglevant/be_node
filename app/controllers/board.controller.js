@@ -1,7 +1,7 @@
-const Board = require("../models/board.model"); // Adjust the path as necessary
+import Board from "../models/board.model.js"; // Adjust the path as necessary
 
 // Create a new board
-exports.createBoard = async (req, res) => {
+export const createBoard = async (req, res) => {
   try {
     const board = new Board({
       boardID: req.body.boardID,
@@ -18,7 +18,7 @@ exports.createBoard = async (req, res) => {
 };
 
 // Get all boards
-exports.getAllBoards = async (req, res) => {
+export const getAllBoards = async (req, res) => {
   try {
     const boards = await Board.find().populate("boardOwner").populate("listID");
     res.status(200).json(boards);
@@ -28,7 +28,7 @@ exports.getAllBoards = async (req, res) => {
 };
 
 // Get a single board by ID
-exports.getBoardById = async (req, res) => {
+export const getBoardById = async (req, res) => {
   try {
     const board = await Board.findById(req.params.id)
       .populate("boardOwner")
@@ -41,7 +41,7 @@ exports.getBoardById = async (req, res) => {
 };
 
 // Update a board
-exports.updateBoard = async (req, res) => {
+export const updateBoard = async (req, res) => {
   try {
     const board = await Board.findByIdAndUpdate(
       req.params.id,
@@ -61,7 +61,7 @@ exports.updateBoard = async (req, res) => {
 };
 
 // Delete a board
-exports.deleteBoard = async (req, res) => {
+export const deleteBoard = async (req, res) => {
   try {
     const board = await Board.findByIdAndDelete(req.params.id);
     if (!board) return res.status(404).json({ message: "Board not found" });
