@@ -7,6 +7,8 @@ const Role = db.role;
 
 export const signup = async (req, res) => {
   try {
+    console.log("Request body:", req.body); // Debugging statement
+
     const user = new User({
       username: req.body.username,
       email: req.body.email,
@@ -27,12 +29,15 @@ export const signup = async (req, res) => {
 
     res.send({ message: "User was registered successfully!" });
   } catch (err) {
+    console.error("Error during signup:", err); // Debugging statement
     res.status(500).send({ message: err.message });
   }
 };
 
 export const signin = async (req, res) => {
   try {
+    console.log("Request body:", req.body); // Debugging statement
+
     const user = await User.findOne({ username: req.body.username }).populate(
       "roles",
       "-__v"
@@ -66,6 +71,7 @@ export const signin = async (req, res) => {
       accessToken: token,
     });
   } catch (err) {
+    console.error("Error during signin:", err); // Debugging statement
     res.status(500).send({ message: err.message });
   }
 };
@@ -75,6 +81,7 @@ export const signout = (req, res) => {
     req.session = null;
     res.status(200).send({ message: "You've been signed out!" });
   } catch (err) {
+    console.error("Error during signout:", err); // Debugging statement
     res.status(500).send({ message: err.message });
   }
 };

@@ -9,12 +9,14 @@ const userSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Role",
+      nullables: true,
     },
   ],
   boardID: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Board",
+      nullables: true,
     },
   ],
 });
