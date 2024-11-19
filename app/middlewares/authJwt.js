@@ -1,9 +1,10 @@
-import config from "../config/auth.config.js";
+import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import db from "../models/index.js";
 const User = db.user;
 const Role = db.role;
 
+dotenv.config();
 const verifyToken = async (req, res, next) => {
   let token = req.session.token;
 
@@ -12,7 +13,7 @@ const verifyToken = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, config.secret);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = decoded.id;
     next();
   } catch (err) {
