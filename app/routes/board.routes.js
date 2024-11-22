@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyToken, isAdmin, isModerator } from "../middlewares/authJwt.js"; // Adjust the path as necessary
+import { verifyToken, isAdmin } from "../middlewares/authJwt.js"; // Adjust the path as necessary
 import * as boardController from "../controllers/board.controller.js"; // Adjust the path as necessary
 
 const router = express.Router();
@@ -11,7 +11,7 @@ export default function (app) {
   });
 
   // Create a new board
-  router.post("/boards", [verifyToken, isAdmin], boardController.createBoard);
+  router.post("/boards", [verifyToken], boardController.createBoard);
 
   // Get all boards
   router.get("/boards", [verifyToken], boardController.getAllBoards);

@@ -3,6 +3,11 @@ import Board from "../models/board.model.js"; // Adjust the path as necessary
 // Create a new board
 export const createBoard = async (req, res) => {
   try {
+    // Validate listID field
+    if (req.body.listID && req.body.listID.length > 0) {
+      req.body.listID = req.body.listID.filter((id) => id.trim() !== "");
+    }
+
     const board = new Board({
       boardID: req.body.boardID,
       boardName: req.body.boardName,
@@ -43,6 +48,11 @@ export const getBoardById = async (req, res) => {
 // Update a board
 export const updateBoard = async (req, res) => {
   try {
+    // Validate listID field
+    if (req.body.listID && req.body.listID.length > 0) {
+      req.body.listID = req.body.listID.filter((id) => id.trim() !== "");
+    }
+
     const board = await Board.findByIdAndUpdate(
       req.params.id,
       {

@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyToken, isAdmin, isModerator } from "../middlewares/authJwt.js"; // Adjust the path as necessary
+import { verifyToken, isAdmin } from "../middlewares/authJwt.js"; // Adjust the path as necessary
 import * as cardController from "../controllers/card.controller.js"; // Adjust the path as necessary
 
 const router = express.Router();

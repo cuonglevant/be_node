@@ -58,12 +58,14 @@ import boardRoutes from "./app/routes/board.routes.js"; // Adjust the path as ne
 import listRoutes from "./app/routes/list.routes.js"; // Adjust the path as necessary
 import historyRoutes from "./app/routes/history.routes.js"; // Adjust the path as necessary
 import cardRoutes from "./app/routes/card.routes.js"; // Adjust the path as necessary
+import userRoutes from "./app/routes/user.routes.js"; // Adjust the path as necessary
 
 authRoutes(app);
 boardRoutes(app);
 listRoutes(app);
 historyRoutes(app);
 cardRoutes(app);
+userRoutes(app);
 
 // Set port, listen for requests
 const PORT = process.env.PORT || 8080;

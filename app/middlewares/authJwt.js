@@ -1,27 +1,29 @@
-import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import db from "../models/index.js";
 const User = db.user;
 const Role = db.role;
 
-dotenv.config();
-const verifyToken = async (req, res, next) => {
-  let token = req.session.token;
+export const verifyToken = (req, res, next) => {
+  let token = req.headers["authorization"];
 
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
   }
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  if (token.startsWith("Bearer ")) {
+    token = token.slice(7, token.length).trim();
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: "Unauthorized!" });
+    }
     req.userId = decoded.id;
     next();
-  } catch (err) {
-    return res.status(401).send({ message: "Unauthorized!" });
-  }
+  });
 };
 
-const isAdmin = async (req, res, next) => {
+export const isAdmin = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId).exec();
     if (!user) {
@@ -41,7 +43,7 @@ const isAdmin = async (req, res, next) => {
   }
 };
 
-const isModerator = async (req, res, next) => {
+export const isModerator = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId).exec();
     if (!user) {
@@ -60,5 +62,3 @@ const isModerator = async (req, res, next) => {
     return res.status(500).send({ message: err.message });
   }
 };
-
-export { verifyToken, isAdmin, isModerator };
