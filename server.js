@@ -9,7 +9,17 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: true, // Replace with your frontend's origin
+  credentials: true, // Allow credentials
+  optionsSuccessStatus: 200,
+  headers: {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+  },
+};
+
+app.use(cors(corsOptions));
 /* for Angular Client (withCredentials) */
 // app.use(
 //   cors({
