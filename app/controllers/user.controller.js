@@ -7,7 +7,7 @@ export const userBoard = (req, res) => {
 };
 
 export const adminBoard = (req, res) => {
-  res.status(200).send("Admin Content.");
+  res.status(200).send("Cái này là Cường làm nè!");
 };
 
 export const moderatorBoard = (req, res) => {

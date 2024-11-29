@@ -6,7 +6,10 @@ const router = express.Router();
 
 export default function (app) {
   app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, Content-Type, Accept, Authorization"
+    );
     next();
   });
 
