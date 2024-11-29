@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyToken, isAdmin } from "../middlewares/authJwt.js"; // Adjust the path as necessary
+import { verifyToken } from "../middlewares/authJwt.js"; // Adjust the path as necessary
 import * as boardController from "../controllers/board.controller.js"; // Adjust the path as necessary
 
 const router = express.Router();
@@ -20,18 +20,10 @@ export default function (app) {
   router.get("/boards/:id", [verifyToken], boardController.getBoardById);
 
   // Update a board
-  router.put(
-    "/boards/:id",
-    [verifyToken, isAdmin],
-    boardController.updateBoard
-  );
+  router.put("/boards/:id", [verifyToken], boardController.updateBoard);
 
   // Delete a board
-  router.delete(
-    "/boards/:id",
-    [verifyToken, isAdmin],
-    boardController.deleteBoard
-  );
+  router.delete("/boards/:id", [verifyToken], boardController.deleteBoard);
 
   app.use("/api", router);
 }

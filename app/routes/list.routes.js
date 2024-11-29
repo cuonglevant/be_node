@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyToken, isAdmin, isModerator } from "../middlewares/authJwt.js"; // Adjust the path as necessary
+import { verifyToken } from "../middlewares/authJwt.js"; // Adjust the path as necessary
 import * as listController from "../controllers/list.controller.js"; // Adjust the path as necessary
 
 const router = express.Router();
@@ -11,7 +11,7 @@ export default function (app) {
   });
 
   // Create a new list
-  router.post("/lists", [verifyToken, isAdmin], listController.createList);
+  router.post("/lists", [verifyToken], listController.createList);
 
   // Get all lists
   router.get("/lists", [verifyToken], listController.getAllLists);
@@ -20,14 +20,10 @@ export default function (app) {
   router.get("/lists/:id", [verifyToken], listController.getListById);
 
   // Update a list
-  router.put("/lists/:id", [verifyToken, isAdmin], listController.updateList);
+  router.put("/lists/:id", [verifyToken], listController.updateList);
 
   // Delete a list
-  router.delete(
-    "/lists/:id",
-    [verifyToken, isAdmin],
-    listController.deleteList
-  );
+  router.delete("/lists/:id", [verifyToken], listController.deleteList);
 
   app.use("/api", router);
 }

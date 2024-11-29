@@ -1,5 +1,5 @@
 import express from "express";
-import { verifyToken, isAdmin } from "../middlewares/authJwt.js"; // Adjust the path as necessary
+import { verifyToken } from "../middlewares/authJwt.js"; // Adjust the path as necessary
 import * as cardController from "../controllers/card.controller.js"; // Adjust the path as necessary
 
 const router = express.Router();
@@ -23,11 +23,7 @@ export default function (app) {
   router.put("/cards/:id", [verifyToken], cardController.updateCard);
 
   // Delete a card
-  router.delete(
-    "/cards/:id",
-    [verifyToken, isAdmin],
-    cardController.deleteCard
-  );
+  router.delete("/cards/:id", [verifyToken], cardController.deleteCard);
 
   app.use("/api", router);
 }

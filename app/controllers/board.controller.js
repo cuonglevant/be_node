@@ -13,6 +13,7 @@ export const createBoard = async (req, res) => {
       boardName: req.body.boardName,
       boardOwner: req.body.boardOwner,
       listID: req.body.listID,
+      boardBackgroundColor: req.body.boardBackgroundColor,
     });
 
     const savedBoard = await board.save();
@@ -60,6 +61,7 @@ export const updateBoard = async (req, res) => {
         boardName: req.body.boardName,
         boardOwner: req.body.boardOwner,
         listID: req.body.listID,
+        color: req.body.boardBackgroundColor,
       },
       { new: true }
     );

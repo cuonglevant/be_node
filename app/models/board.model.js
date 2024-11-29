@@ -16,6 +16,7 @@ const boardSchema = new mongoose.Schema({
       nullables: true,
     },
   ],
+  boardBackgroundColor: String,
 });
 
 const Board = mongoose.model("Board", boardSchema);
