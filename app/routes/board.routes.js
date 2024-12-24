@@ -1,5 +1,4 @@
 import express from "express";
-import { verifyToken } from "../middlewares/authJwt.js"; // Adjust the path as necessary
 import * as boardController from "../controllers/board.controller.js"; // Adjust the path as necessary
 
 const router = express.Router();
@@ -14,19 +13,19 @@ export default function (app) {
   });
 
   // Create a new board
-  router.post("/boards", [verifyToken], boardController.createBoard);
+  router.post("/boards", boardController.createBoard);
 
   // Get all boards
-  router.get("/boards", [verifyToken], boardController.getAllBoards);
+  router.get("/boards", boardController.getAllBoards);
 
   // Get a single board by ID
-  router.get("/boards/:id", [verifyToken], boardController.getBoardById);
+  router.get("/boards/:id", boardController.getBoardById);
 
   // Update a board
-  router.put("/boards/:id", [verifyToken], boardController.updateBoard);
+  router.put("/boards/:id", boardController.updateBoard);
 
   // Delete a board
-  router.delete("/boards/:id", [verifyToken], boardController.deleteBoard);
+  router.delete("/boards/:id", boardController.deleteBoard);
 
   app.use("/api", router);
 }

@@ -1,5 +1,4 @@
 import express from "express";
-import { verifyToken } from "../middlewares/authJwt.js"; // Adjust the path as necessary
 import * as cardController from "../controllers/card.controller.js"; // Adjust the path as necessary
 
 const router = express.Router();
@@ -14,19 +13,19 @@ export default function (app) {
   });
 
   // Create a new card
-  router.post("/cards", [verifyToken], cardController.createCard);
+  router.post("/cards", cardController.createCard);
 
   // Get all cards
-  router.get("/cards", [verifyToken], cardController.getAllCards);
+  router.get("/cards", cardController.getAllCards);
 
   // Get a single card by ID
-  router.get("/cards/:id", [verifyToken], cardController.getCardById);
+  router.get("/cards/:id", cardController.getCardById);
 
   // Update a card
-  router.put("/cards/:id", [verifyToken], cardController.updateCard);
+  router.put("/cards/:id", cardController.updateCard);
 
   // Delete a card
-  router.delete("/cards/:id", [verifyToken], cardController.deleteCard);
+  router.delete("/cards/:id", cardController.deleteCard);
 
   app.use("/api", router);
 }
