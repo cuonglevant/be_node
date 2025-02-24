@@ -1,10 +1,13 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  userID: String,
   username: String,
+  dob: Date,
   email: String,
   password: String,
+  phoneNumber: String,
+  idCard: String,
+  userImage: String,
   roles: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -12,10 +15,10 @@ const userSchema = new mongoose.Schema({
       nullables: true,
     },
   ],
-  boardID: [
+  viewedContent: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Board",
+      ref: "Content",
       nullables: true,
     },
   ],

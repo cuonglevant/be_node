@@ -20,18 +20,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-/* for Angular Client (withCredentials) */
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: ["http://localhost:8081"],
-//   })
-// );
 
-// parse requests of content-type - application/json
 app.use(express.json());
 
-// parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
@@ -63,19 +54,26 @@ mongoose
   });
 
 // Import routes
-import authRoutes from "./app/routes/auth.routes.js"; // Adjust the path as necessary
-import boardRoutes from "./app/routes/board.routes.js"; // Adjust the path as necessary
-import listRoutes from "./app/routes/list.routes.js"; // Adjust the path as necessary
-import historyRoutes from "./app/routes/history.routes.js"; // Adjust the path as necessary
-import cardRoutes from "./app/routes/card.routes.js"; // Adjust the path as necessary
-import userRoutes from "./app/routes/user.routes.js"; // Adjust the path as necessary
+import authRoutes from "./app/routes/auth.routes.js";
+import userRoutes from "./app/routes/user.routes.js";
+import categoryRoutes from "./app/routes/category.routes.js";
+import contentRoutes from "./app/routes/content.routes.js";
+import mediaRoutes from "./app/routes/media.routes.js";
+import teamRoutes from "./app/routes/team.routes.js";
+import playerRoutes from "./app/routes/player.routes.js";
+import nationRoutes from "./app/routes/nation.routes.js";
+import leagueRoutes from "./app/routes/league.routes.js";
 
-authRoutes(app);
-boardRoutes(app);
-listRoutes(app);
-historyRoutes(app);
-cardRoutes(app);
-userRoutes(app);
+// Use routes
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/category", categoryRoutes);
+app.use("/api/content", contentRoutes);
+app.use("/api/media", mediaRoutes);
+app.use("/api/team", teamRoutes);
+app.use("/api/player", playerRoutes);
+app.use("/api/nation", nationRoutes);
+app.use("/api/league", leagueRoutes);
 
 // Set port, listen for requests
 const PORT = process.env.PORT || 8080;
@@ -94,16 +92,6 @@ function initial() {
         }
 
         console.log("added 'user' to roles collection");
-      });
-
-      new Role({
-        name: "moderator",
-      }).save((err) => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'moderator' to roles collection");
       });
 
       new Role({

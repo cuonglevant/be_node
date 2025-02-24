@@ -1,0 +1,115 @@
+import Content from "../models/content.model.js";
+
+// Create a new content
+export const createContent = async (req, res) => {
+  try {
+    const {
+      title,
+      content,
+      publishDate,
+      author,
+      media,
+      comment,
+      category,
+      numOfViews,
+    } = req.body;
+    const newContent = new Content({
+      title,
+      content,
+      publishDate,
+      author,
+      media,
+      comment,
+      category,
+      numOfViews,
+    });
+    await newContent.save();
+    res.status(201).json(newContent);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get all content
+export const getContents = async (req, res) => {
+  try {
+    const contents = await Content.find()
+      .populate("author")
+      .populate("media")
+      .populate("category")
+      .populate("comment.author");
+    res.status(200).json(contents);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get a single content by ID
+export const getContentById = async (req, res) => {
+  try {
+    const content = await Content.findById(req.params.id)
+      .populate("author")
+      .populate("media")
+      .populate("category")
+      .populate("comment.author");
+    if (!content) {
+      return res.status(404).json({ message: "Content not found" });
+    }
+    res.status(200).json(content);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update a content by ID
+export const updateContent = async (req, res) => {
+  try {
+    const {
+      title,
+      content,
+      publishDate,
+      author,
+      media,
+      comment,
+      category,
+      numOfViews,
+    } = req.body;
+    const updatedContent = await Content.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        content,
+        publishDate,
+        author,
+        media,
+        comment,
+        category,
+        numOfViews,
+      },
+      { new: true }
+    )
+      .populate("author")
+      .populate("media")
+      .populate("category")
+      .populate("comment.author");
+    if (!updatedContent) {
+      return res.status(404).json({ message: "Content not found" });
+    }
+    res.status(200).json(updatedContent);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Delete a content by ID
+export const deleteContent = async (req, res) => {
+  try {
+    const content = await Content.findByIdAndDelete(req.params.id);
+    if (!content) {
+      return res.status(404).json({ message: "Content not found" });
+    }
+    res.status(200).json({ message: "Content deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
