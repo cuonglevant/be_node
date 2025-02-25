@@ -104,6 +104,22 @@ export const getContentsByDate = async (req, res) => {
   }
 };
 
+// Get top 15 contents by views
+export const getTopContents = async (req, res) => {
+  try {
+    const topContents = await Content.find()
+      .sort({ numOfViews: -1 }) // Sort by views in descending order
+      .limit(15) // Limit to top 15
+      .populate("author")
+      .populate("media")
+      .populate("category")
+      .populate("comment.author");
+    res.status(200).json(topContents);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Get a single content by ID
 export const getContentById = async (req, res) => {
   try {

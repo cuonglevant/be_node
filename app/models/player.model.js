@@ -16,6 +16,10 @@ const playerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Nation",
   },
+  pointsScored: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const Player = mongoose.model("Player", playerSchema);

@@ -10,6 +10,7 @@ import {
   deleteMatchBySlug,
   getMatchesByDate,
   viewMatch,
+  getTopMatches,
 } from "../controllers/match.controller.js";
 import { verifyToken } from "../middlewares/authJwt.js";
 
@@ -25,5 +26,6 @@ router.put("/id/:id", verifyToken, updateMatch);
 router.put("/:slug", verifyToken, updateMatchBySlug);
 router.delete("/id/:id", verifyToken, deleteMatch);
 router.delete("/:slug", verifyToken, deleteMatchBySlug);
+router.get("/top/views", getTopMatches);
 
 export default router;

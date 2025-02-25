@@ -4,9 +4,9 @@ import slugify from "../middlewares/slugify.js";
 // Create a new player
 export const createPlayer = async (req, res) => {
   try {
-    const { name, position, team, media, nation } = req.body;
+    const { name, position, team, media, nation, pointsScored } = req.body;
     const slug = slugify(name, { lower: true });
-    const player = new Player({ name, position, team, media, nation, slug });
+    const player = new Player({ name, position, team, media, nation, slug, pointsScored });
     await player.save();
     res.status(201).json(player);
   } catch (error) {
@@ -55,11 +55,11 @@ export const getPlayerBySlug = async (req, res) => {
 // Update a player by ID
 export const updatePlayer = async (req, res) => {
   try {
-    const { name, position, team, media, nation } = req.body;
+    const { name, position, team, media, nation, pointsScored } = req.body;
     const slug = slugify(name, { lower: true });
     const player = await Player.findByIdAndUpdate(
       req.params.id,
-      { name, position, team, nation, media, slug },
+      { name, position, team, nation, media, slug, pointsScored },
       { new: true }
     ).populate("team");
     if (!player) {
@@ -74,11 +74,11 @@ export const updatePlayer = async (req, res) => {
 // Update a player by slug
 export const updatePlayerBySlug = async (req, res) => {
   try {
-    const { name, position, team, media, nation } = req.body;
+    const { name, position, team, media, nation, pointsScored } = req.body;
     const slug = slugify(name, { lower: true });
     const player = await Player.findOneAndUpdate(
       { slug: req.params.slug },
-      { name, position, team, nation, media, slug },
+      { name, position, team, nation, media, slug, pointsScored },
       { new: true }
     ).populate("team");
     if (!player) {

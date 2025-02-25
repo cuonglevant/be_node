@@ -24,6 +24,44 @@ export const getLeagues = async (req, res) => {
   }
 };
 
+// Get top 10 teams by points within the same league slug
+export const getTopTeamsByPoints = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const league = await League.findOne({ slug });
+    if (!league) {
+      return res.status(404).json({ message: "League not found" });
+    }
+    const topTeams = await Team.find({ league: league._id })
+      .sort({ points: -1 }) // Sort by points in descending order
+      .limit(10) // Limit to top 10
+      .populate("league");
+    res.status(200).json(topTeams);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get top 10 players by pointsScored within the same league slug
+export const getTopPlayersByPoints = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const league = await League.findOne({ slug });
+    if (!league) {
+      return res.status(404).json({ message: "League not found" });
+    }
+    const teams = await Team.find({ league: league._id });
+    const teamIds = teams.map((team) => team._id);
+    const topPlayers = await Player.find({ team: { $in: teamIds } })
+      .sort({ pointsScored: -1 }) // Sort by pointsScored in descending order
+      .limit(10) // Limit to top 10
+      .populate("team");
+    res.status(200).json(topPlayers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Get a single league by ID
 export const getLeagueById = async (req, res) => {
   try {

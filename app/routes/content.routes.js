@@ -10,6 +10,7 @@ import {
   deleteContent,
   deleteContentBySlug,
   viewContent,
+  getTopContents,
 } from "../controllers/content.controller.js";
 import { verifyToken } from "../middlewares/authJwt.js";
 
@@ -25,5 +26,6 @@ router.put("/:slug", verifyToken, updateContentBySlug);
 router.delete("/id/:id", verifyToken, deleteContent);
 router.delete("/:slug", verifyToken, deleteContentBySlug);
 router.post("/view/:contentId", verifyToken, viewContent);
+router.get("/top/views", getTopContents);
 
 export default router;

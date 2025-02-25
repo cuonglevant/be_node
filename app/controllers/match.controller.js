@@ -150,6 +150,24 @@ export const viewMatch = async (req, res) => {
   }
 };
 
+// Get top 15 matches by views
+export const getTopMatches = async (req, res) => {
+  try {
+    const matches = await Match.find()
+      .sort({ views: -1 })
+      .limit(15)
+      .populate("homeTeam")
+      .populate("awayTeam")
+      .populate("league")
+      .populate("category")
+      .populate("media")
+      .populate("content");
+    res.status(200).json(matches);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Update a match by ID
 export const updateMatch = async (req, res) => {
   try {

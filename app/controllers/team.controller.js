@@ -4,9 +4,17 @@ import slugify from "../middlewares/slugify.js";
 // Create a new team
 export const createTeam = async (req, res) => {
   try {
-    const { name, league, players, media, nation } = req.body;
+    const { name, league, players, media, nation, points } = req.body;
     const slug = slugify(name, { lower: true });
-    const team = new Team({ name, league, players, media, nation, slug });
+    const team = new Team({
+      name,
+      league,
+      players,
+      media,
+      nation,
+      slug,
+      points,
+    });
     await team.save();
     res.status(201).json(team);
   } catch (error) {
@@ -55,11 +63,11 @@ export const getTeamBySlug = async (req, res) => {
 // Update a team by ID
 export const updateTeam = async (req, res) => {
   try {
-    const { name, league, players, media, nation } = req.body;
+    const { name, league, players, media, nation, points } = req.body;
     const slug = slugify(name, { lower: true });
     const team = await Team.findByIdAndUpdate(
       req.params.id,
-      { name, league, players, media, nation, slug },
+      { name, league, players, media, nation, slug, points },
       { new: true }
     ).populate("league");
     if (!team) {
