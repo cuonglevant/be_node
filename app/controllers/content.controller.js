@@ -1,6 +1,6 @@
 import Content from "../models/content.model.js";
 import User from "../models/user.model.js";
-import slugify from "slugify";
+import slugify from "../middlewares/slugify.js";
 
 // Create a new content
 export const createContent = async (req, res) => {

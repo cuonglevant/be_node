@@ -1,5 +1,5 @@
 import Team from "../models/team.model.js";
-import slugify from "slugify";
+import slugify from "../middlewares/slugify.js";
 
 // Create a new team
 export const createTeam = async (req, res) => {

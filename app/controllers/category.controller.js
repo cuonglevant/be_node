@@ -1,5 +1,5 @@
 import Category from "../models/category.model.js";
-import slugify from "slugify";
+import slugify from "../middlewares/slugify.js";
 
 // Create a new category
 export const createCategory = async (req, res) => {

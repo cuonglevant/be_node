@@ -1,5 +1,5 @@
 import Player from "../models/player.model.js";
-import slugify from "slugify";
+import slugify from "../middlewares/slugify.js";
 
 // Create a new player
 export const createPlayer = async (req, res) => {

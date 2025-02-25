@@ -1,5 +1,5 @@
 import Match from "../models/match.model.js";
-import slugify from "slugify";
+import slugify from "../middlewares/slugify.js";
 
 // Create a new match
 export const createMatch = async (req, res) => {

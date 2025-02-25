@@ -1,5 +1,5 @@
 import Nation from "../models/nation.model.js";
-import slugify from "slugify";
+import slugify from "../middlewares/slugify.js";
 
 // Create a new nation
 export const createNation = async (req, res) => {

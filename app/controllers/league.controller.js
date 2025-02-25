@@ -1,5 +1,5 @@
 import League from "../models/league.model.js";
-import slugify from "slugify";
+import slugify from "../middlewares/slugify.js";
 
 // Create a new league
 export const createLeague = async (req, res) => {
