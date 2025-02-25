@@ -6,7 +6,15 @@ export const createPlayer = async (req, res) => {
   try {
     const { name, position, team, media, nation, pointsScored } = req.body;
     const slug = slugify(name, { lower: true });
-    const player = new Player({ name, position, team, media, nation, slug, pointsScored });
+    const player = new Player({
+      name,
+      position,
+      team,
+      media,
+      nation,
+      slug,
+      pointsScored,
+    });
     await player.save();
     res.status(201).json(player);
   } catch (error) {
@@ -28,9 +36,7 @@ export const getPlayers = async (req, res) => {
 export const getPlayerById = async (req, res) => {
   try {
     const player = await Player.findById(req.params.id).populate("team");
-    if (!player) {
-      return res.status(404).json({ message: "Player not found" });
-    }
+    if (!player) return res.status(404).json({ message: "Player not found" });
     res.status(200).json(player);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -43,9 +49,7 @@ export const getPlayerBySlug = async (req, res) => {
     const player = await Player.findOne({ slug: req.params.slug }).populate(
       "team"
     );
-    if (!player) {
-      return res.status(404).json({ message: "Player not found" });
-    }
+    if (!player) return res.status(404).json({ message: "Player not found" });
     res.status(200).json(player);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -62,9 +66,7 @@ export const updatePlayer = async (req, res) => {
       { name, position, team, nation, media, slug, pointsScored },
       { new: true }
     ).populate("team");
-    if (!player) {
-      return res.status(404).json({ message: "Player not found" });
-    }
+    if (!player) return res.status(404).json({ message: "Player not found" });
     res.status(200).json(player);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -81,9 +83,7 @@ export const updatePlayerBySlug = async (req, res) => {
       { name, position, team, nation, media, slug, pointsScored },
       { new: true }
     ).populate("team");
-    if (!player) {
-      return res.status(404).json({ message: "Player not found" });
-    }
+    if (!player) return res.status(404).json({ message: "Player not found" });
     res.status(200).json(player);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -94,9 +94,7 @@ export const updatePlayerBySlug = async (req, res) => {
 export const deletePlayer = async (req, res) => {
   try {
     const player = await Player.findByIdAndDelete(req.params.id);
-    if (!player) {
-      return res.status(404).json({ message: "Player not found" });
-    }
+    if (!player) return res.status(404).json({ message: "Player not found" });
     res.status(200).json({ message: "Player deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -107,9 +105,7 @@ export const deletePlayer = async (req, res) => {
 export const deletePlayerBySlug = async (req, res) => {
   try {
     const player = await Player.findOneAndDelete({ slug: req.params.slug });
-    if (!player) {
-      return res.status(404).json({ message: "Player not found" });
-    }
+    if (!player) return res.status(404).json({ message: "Player not found" });
     res.status(200).json({ message: "Player deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

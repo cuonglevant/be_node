@@ -40,13 +40,9 @@ export const createMatch = async (req, res) => {
 // Get all matches
 export const getMatches = async (req, res) => {
   try {
-    const matches = await Match.find()
-      .populate("homeTeam")
-      .populate("awayTeam")
-      .populate("league")
-      .populate("category")
-      .populate("media")
-      .populate("content");
+    const matches = await Match.find().populate(
+      "homeTeam awayTeam league category media content"
+    );
     res.status(200).json(matches);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -61,20 +57,9 @@ export const getMatchesByDate = async (req, res) => {
     startOfDay.setHours(0, 0, 0, 0);
     const endOfDay = new Date(date);
     endOfDay.setHours(23, 59, 59, 999);
-
     const matches = await Match.find({
-      date: {
-        $gte: startOfDay,
-        $lte: endOfDay,
-      },
-    })
-      .populate("homeTeam")
-      .populate("awayTeam")
-      .populate("league")
-      .populate("category")
-      .populate("media")
-      .populate("content");
-
+      date: { $gte: startOfDay, $lte: endOfDay },
+    }).populate("homeTeam awayTeam league category media content");
     res.status(200).json(matches);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -84,16 +69,10 @@ export const getMatchesByDate = async (req, res) => {
 // Get a single match by ID
 export const getMatchById = async (req, res) => {
   try {
-    const match = await Match.findById(req.params.id)
-      .populate("homeTeam")
-      .populate("awayTeam")
-      .populate("league")
-      .populate("category")
-      .populate("media")
-      .populate("content");
-    if (!match) {
-      return res.status(404).json({ message: "Match not found" });
-    }
+    const match = await Match.findById(req.params.id).populate(
+      "homeTeam awayTeam league category media content"
+    );
+    if (!match) return res.status(404).json({ message: "Match not found" });
     res.status(200).json(match);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -103,16 +82,10 @@ export const getMatchById = async (req, res) => {
 // Get a single match by slug
 export const getMatchBySlug = async (req, res) => {
   try {
-    const match = await Match.findOne({ slug: req.params.slug })
-      .populate("homeTeam")
-      .populate("awayTeam")
-      .populate("league")
-      .populate("category")
-      .populate("media")
-      .populate("content");
-    if (!match) {
-      return res.status(404).json({ message: "Match not found" });
-    }
+    const match = await Match.findOne({ slug: req.params.slug }).populate(
+      "homeTeam awayTeam league category media content"
+    );
+    if (!match) return res.status(404).json({ message: "Match not found" });
     res.status(200).json(match);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -124,25 +97,16 @@ export const viewMatch = async (req, res) => {
   try {
     const userId = req.userId;
     const matchId = req.params.matchId;
-
     const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).send({ message: "User not found" });
-    }
-
+    if (!user) return res.status(404).send({ message: "User not found" });
     const match = await Match.findById(matchId);
-    if (!match) {
-      return res.status(404).send({ message: "Match not found" });
-    }
-
+    if (!match) return res.status(404).send({ message: "Match not found" });
     if (!user.viewedMatches.includes(matchId)) {
       user.viewedMatches.push(matchId);
       await user.save();
     }
-
     match.views = (match.views || 0) + 1;
     await match.save();
-
     res.status(200).send({ message: "Match viewed successfully" });
   } catch (err) {
     console.error("Error during viewing match:", err);
@@ -156,12 +120,7 @@ export const getTopMatches = async (req, res) => {
     const matches = await Match.find()
       .sort({ views: -1 })
       .limit(15)
-      .populate("homeTeam")
-      .populate("awayTeam")
-      .populate("league")
-      .populate("category")
-      .populate("media")
-      .populate("content");
+      .populate("homeTeam awayTeam league category media content");
     res.status(200).json(matches);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -198,16 +157,9 @@ export const updateMatch = async (req, res) => {
         slug,
       },
       { new: true }
-    )
-      .populate("homeTeam")
-      .populate("awayTeam")
-      .populate("league")
-      .populate("category")
-      .populate("media")
-      .populate("content");
-    if (!updatedMatch) {
+    ).populate("homeTeam awayTeam league category media content");
+    if (!updatedMatch)
       return res.status(404).json({ message: "Match not found" });
-    }
     res.status(200).json(updatedMatch);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -244,16 +196,9 @@ export const updateMatchBySlug = async (req, res) => {
         slug,
       },
       { new: true }
-    )
-      .populate("homeTeam")
-      .populate("awayTeam")
-      .populate("league")
-      .populate("category")
-      .populate("media")
-      .populate("content");
-    if (!updatedMatch) {
+    ).populate("homeTeam awayTeam league category media content");
+    if (!updatedMatch)
       return res.status(404).json({ message: "Match not found" });
-    }
     res.status(200).json(updatedMatch);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -264,9 +209,7 @@ export const updateMatchBySlug = async (req, res) => {
 export const deleteMatch = async (req, res) => {
   try {
     const match = await Match.findByIdAndDelete(req.params.id);
-    if (!match) {
-      return res.status(404).json({ message: "Match not found" });
-    }
+    if (!match) return res.status(404).json({ message: "Match not found" });
     res.status(200).json({ message: "Match deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -277,9 +220,7 @@ export const deleteMatch = async (req, res) => {
 export const deleteMatchBySlug = async (req, res) => {
   try {
     const match = await Match.findOneAndDelete({ slug: req.params.slug });
-    if (!match) {
-      return res.status(404).json({ message: "Match not found" });
-    }
+    if (!match) return res.status(404).json({ message: "Match not found" });
     res.status(200).json({ message: "Match deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

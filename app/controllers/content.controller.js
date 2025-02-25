@@ -34,29 +34,21 @@ export const createContent = async (req, res) => {
   }
 };
 
+// View content
 export const viewContent = async (req, res) => {
   try {
     const userId = req.userId;
     const contentId = req.params.contentId;
-
     const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).send({ message: "User not found" });
-    }
-
+    if (!user) return res.status(404).send({ message: "User not found" });
     const content = await Content.findById(contentId);
-    if (!content) {
-      return res.status(404).send({ message: "Content not found" });
-    }
-
+    if (!content) return res.status(404).send({ message: "Content not found" });
     if (!user.viewedContent.includes(contentId)) {
       user.viewedContent.push(contentId);
       await user.save();
     }
-
     content.numOfViews = (content.numOfViews || 0) + 1;
     await content.save();
-
     res.status(200).send({ message: "Content viewed successfully" });
   } catch (err) {
     console.error("Error during viewing content:", err);
@@ -67,11 +59,9 @@ export const viewContent = async (req, res) => {
 // Get all content
 export const getContents = async (req, res) => {
   try {
-    const contents = await Content.find()
-      .populate("author")
-      .populate("media")
-      .populate("category")
-      .populate("comment.author");
+    const contents = await Content.find().populate(
+      "author media category comment.author"
+    );
     res.status(200).json(contents);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -86,18 +76,9 @@ export const getContentsByDate = async (req, res) => {
     startOfDay.setHours(0, 0, 0, 0);
     const endOfDay = new Date(date);
     endOfDay.setHours(23, 59, 59, 999);
-
     const contents = await Content.find({
-      publishDate: {
-        $gte: startOfDay,
-        $lte: endOfDay,
-      },
-    })
-      .populate("author")
-      .populate("media")
-      .populate("category")
-      .populate("comment.author");
-
+      publishDate: { $gte: startOfDay, $lte: endOfDay },
+    }).populate("author media category comment.author");
     res.status(200).json(contents);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -108,12 +89,9 @@ export const getContentsByDate = async (req, res) => {
 export const getTopContents = async (req, res) => {
   try {
     const topContents = await Content.find()
-      .sort({ numOfViews: -1 }) // Sort by views in descending order
-      .limit(15) // Limit to top 15
-      .populate("author")
-      .populate("media")
-      .populate("category")
-      .populate("comment.author");
+      .sort({ numOfViews: -1 })
+      .limit(15)
+      .populate("author media category comment.author");
     res.status(200).json(topContents);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -123,14 +101,10 @@ export const getTopContents = async (req, res) => {
 // Get a single content by ID
 export const getContentById = async (req, res) => {
   try {
-    const content = await Content.findById(req.params.id)
-      .populate("author")
-      .populate("media")
-      .populate("category")
-      .populate("comment.author");
-    if (!content) {
-      return res.status(404).json({ message: "Content not found" });
-    }
+    const content = await Content.findById(req.params.id).populate(
+      "author media category comment.author"
+    );
+    if (!content) return res.status(404).json({ message: "Content not found" });
     res.status(200).json(content);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -140,14 +114,10 @@ export const getContentById = async (req, res) => {
 // Get a single content by slug
 export const getContentBySlug = async (req, res) => {
   try {
-    const content = await Content.findOne({ slug: req.params.slug })
-      .populate("author")
-      .populate("media")
-      .populate("category")
-      .populate("comment.author");
-    if (!content) {
-      return res.status(404).json({ message: "Content not found" });
-    }
+    const content = await Content.findOne({ slug: req.params.slug }).populate(
+      "author media category comment.author"
+    );
+    if (!content) return res.status(404).json({ message: "Content not found" });
     res.status(200).json(content);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -180,14 +150,9 @@ export const updateContent = async (req, res) => {
         numOfViews,
       },
       { new: true }
-    )
-      .populate("author")
-      .populate("media")
-      .populate("category")
-      .populate("comment.author");
-    if (!updatedContent) {
+    ).populate("author media category comment.author");
+    if (!updatedContent)
       return res.status(404).json({ message: "Content not found" });
-    }
     res.status(200).json(updatedContent);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -222,14 +187,9 @@ export const updateContentBySlug = async (req, res) => {
         numOfViews,
       },
       { new: true }
-    )
-      .populate("author")
-      .populate("media")
-      .populate("category")
-      .populate("comment.author");
-    if (!updatedContent) {
+    ).populate("author media category comment.author");
+    if (!updatedContent)
       return res.status(404).json({ message: "Content not found" });
-    }
     res.status(200).json(updatedContent);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -240,9 +200,7 @@ export const updateContentBySlug = async (req, res) => {
 export const deleteContent = async (req, res) => {
   try {
     const content = await Content.findByIdAndDelete(req.params.id);
-    if (!content) {
-      return res.status(404).json({ message: "Content not found" });
-    }
+    if (!content) return res.status(404).json({ message: "Content not found" });
     res.status(200).json({ message: "Content deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -253,9 +211,7 @@ export const deleteContent = async (req, res) => {
 export const deleteContentBySlug = async (req, res) => {
   try {
     const content = await Content.findOneAndDelete({ slug: req.params.slug });
-    if (!content) {
-      return res.status(404).json({ message: "Content not found" });
-    }
+    if (!content) return res.status(404).json({ message: "Content not found" });
     res.status(200).json({ message: "Content deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

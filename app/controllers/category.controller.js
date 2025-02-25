@@ -28,41 +28,20 @@ export const getCategories = async (req, res) => {
 export const getCategoryById = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
-    if (!category) {
+    if (!category)
       return res.status(404).json({ message: "Category not found" });
-    }
     res.status(200).json(category);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-//get a category by slug
+// Get a category by slug
 export const getCategoryBySlug = async (req, res) => {
   try {
     const category = await Category.findOne({ slug: req.params.slug });
-    if (!category) {
+    if (!category)
       return res.status(404).json({ message: "Category not found" });
-    }
-    res.status(200).json(category);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-//update a category by slug
-export const updateCategoryBySlug = async (req, res) => {
-  try {
-    const { name, description } = req.body;
-    const slug = slugify(name, { lower: true });
-    const category = await Category.findOneAndUpdate(
-      { slug: req.params.slug },
-      { name, description, slug },
-      { new: true }
-    );
-    if (!category) {
-      return res.status(404).json({ message: "Category not found" });
-    }
     res.status(200).json(category);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -79,23 +58,27 @@ export const updateCategory = async (req, res) => {
       { name, description, slug },
       { new: true }
     );
-    if (!category) {
+    if (!category)
       return res.status(404).json({ message: "Category not found" });
-    }
     res.status(200).json(category);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-//delete a category by slug
-export const deleteCategoryBySlug = async (req, res) => {
+// Update a category by slug
+export const updateCategoryBySlug = async (req, res) => {
   try {
-    const category = await Category.findOneAndDelete({ slug: req.params.slug });
-    if (!category) {
+    const { name, description } = req.body;
+    const slug = slugify(name, { lower: true });
+    const category = await Category.findOneAndUpdate(
+      { slug: req.params.slug },
+      { name, description, slug },
+      { new: true }
+    );
+    if (!category)
       return res.status(404).json({ message: "Category not found" });
-    }
-    res.status(200).json({ message: "Category deleted successfully" });
+    res.status(200).json(category);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -105,9 +88,20 @@ export const deleteCategoryBySlug = async (req, res) => {
 export const deleteCategory = async (req, res) => {
   try {
     const category = await Category.findByIdAndDelete(req.params.id);
-    if (!category) {
+    if (!category)
       return res.status(404).json({ message: "Category not found" });
-    }
+    res.status(200).json({ message: "Category deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Delete a category by slug
+export const deleteCategoryBySlug = async (req, res) => {
+  try {
+    const category = await Category.findOneAndDelete({ slug: req.params.slug });
+    if (!category)
+      return res.status(404).json({ message: "Category not found" });
     res.status(200).json({ message: "Category deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -28,9 +28,7 @@ export const getNations = async (req, res) => {
 export const getNationById = async (req, res) => {
   try {
     const nation = await Nation.findById(req.params.id).populate("league");
-    if (!nation) {
-      return res.status(404).json({ message: "Nation not found" });
-    }
+    if (!nation) return res.status(404).json({ message: "Nation not found" });
     res.status(200).json(nation);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -43,9 +41,7 @@ export const getNationBySlug = async (req, res) => {
     const nation = await Nation.findOne({ slug: req.params.slug }).populate(
       "league"
     );
-    if (!nation) {
-      return res.status(404).json({ message: "Nation not found" });
-    }
+    if (!nation) return res.status(404).json({ message: "Nation not found" });
     res.status(200).json(nation);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -62,9 +58,7 @@ export const updateNation = async (req, res) => {
       { name, flag, league, slug },
       { new: true }
     ).populate("league");
-    if (!nation) {
-      return res.status(404).json({ message: "Nation not found" });
-    }
+    if (!nation) return res.status(404).json({ message: "Nation not found" });
     res.status(200).json(nation);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -81,9 +75,7 @@ export const updateNationBySlug = async (req, res) => {
       { name, flag, league, slug },
       { new: true }
     ).populate("league");
-    if (!nation) {
-      return res.status(404).json({ message: "Nation not found" });
-    }
+    if (!nation) return res.status(404).json({ message: "Nation not found" });
     res.status(200).json(nation);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -94,9 +86,7 @@ export const updateNationBySlug = async (req, res) => {
 export const deleteNation = async (req, res) => {
   try {
     const nation = await Nation.findByIdAndDelete(req.params.id);
-    if (!nation) {
-      return res.status(404).json({ message: "Nation not found" });
-    }
+    if (!nation) return res.status(404).json({ message: "Nation not found" });
     res.status(200).json({ message: "Nation deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -107,9 +97,7 @@ export const deleteNation = async (req, res) => {
 export const deleteNationBySlug = async (req, res) => {
   try {
     const nation = await Nation.findOneAndDelete({ slug: req.params.slug });
-    if (!nation) {
-      return res.status(404).json({ message: "Nation not found" });
-    }
+    if (!nation) return res.status(404).json({ message: "Nation not found" });
     res.status(200).json({ message: "Nation deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

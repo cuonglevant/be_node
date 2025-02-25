@@ -10,6 +10,7 @@ import {
   deleteLeagueBySlug,
   getTopTeamsByPoints,
   getTopPlayersByPoints,
+  getMatchSchedule,
 } from "../controllers/league.controller.js";
 
 const router = express.Router();
@@ -20,6 +21,7 @@ router.get("/id/:id", getLeagueById);
 router.get("/:slug", getLeagueBySlug);
 router.get("/:slug/top-teams", getTopTeamsByPoints);
 router.get("/:slug/top-players", getTopPlayersByPoints);
+router.get("/:slug/match-schedule", getMatchSchedule);
 router.put("/id/:id", updateLeague);
 router.put("/:slug", updateLeagueBySlug);
 router.delete("/id/:id", deleteLeague);

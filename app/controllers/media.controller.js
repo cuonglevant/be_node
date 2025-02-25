@@ -26,9 +26,7 @@ export const getMedia = async (req, res) => {
 export const getMediaById = async (req, res) => {
   try {
     const media = await Media.findById(req.params.id);
-    if (!media) {
-      return res.status(404).json({ message: "Media not found" });
-    }
+    if (!media) return res.status(404).json({ message: "Media not found" });
     res.status(200).json(media);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -44,9 +42,7 @@ export const updateMedia = async (req, res) => {
       { url, type, description },
       { new: true }
     );
-    if (!media) {
-      return res.status(404).json({ message: "Media not found" });
-    }
+    if (!media) return res.status(404).json({ message: "Media not found" });
     res.status(200).json(media);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -57,9 +53,7 @@ export const updateMedia = async (req, res) => {
 export const deleteMedia = async (req, res) => {
   try {
     const media = await Media.findByIdAndDelete(req.params.id);
-    if (!media) {
-      return res.status(404).json({ message: "Media not found" });
-    }
+    if (!media) return res.status(404).json({ message: "Media not found" });
     res.status(200).json({ message: "Media deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
