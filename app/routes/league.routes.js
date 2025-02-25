@@ -15,10 +15,10 @@ const router = express.Router();
 router.post("/", createLeague);
 router.get("/", getLeagues);
 router.get("/:id", getLeagueById);
-router.get("/:slug", getLeagueBySlug); // Add this line
+router.get("/:slug", getLeagueBySlug);
 router.put("/:id", updateLeague);
-router.put("/:slug", updateLeagueBySlug); // Add this line
+router.put("/:slug", updateLeagueBySlug);
 router.delete("/:id", deleteLeague);
-router.delete("/:slug", deleteLeagueBySlug); // Add this line
+router.delete("/:slug", deleteLeagueBySlug);
 
 export default router;
