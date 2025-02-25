@@ -16,12 +16,12 @@ const router = express.Router();
 
 router.post("/", verifyToken, createMatch);
 router.get("/", getMatches);
-router.get("/date/:date", getMatchesByDate);
+router.get("/:date", getMatchesByDate);
 router.get("/:id", getMatchById);
-router.get("/slug/:slug", getMatchBySlug); // Add this line
+router.get("/:slug", getMatchBySlug); // Add this line
 router.put("/:id", verifyToken, updateMatch);
-router.put("/slug/:slug", verifyToken, updateMatchBySlug); // Add this line
+router.put("/:slug", verifyToken, updateMatchBySlug); // Add this line
 router.delete("/:id", verifyToken, deleteMatch);
-router.delete("/slug/:slug", verifyToken, deleteMatchBySlug); // Add this line
+router.delete("/:slug", verifyToken, deleteMatchBySlug); // Add this line
 
 export default router;

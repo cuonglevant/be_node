@@ -15,10 +15,10 @@ const router = express.Router();
 router.post("/", createTeam);
 router.get("/", getTeams);
 router.get("/:id", getTeamById);
-router.get("/slug/:slug", getTeamBySlug); // Add this line
+router.get("/:slug", getTeamBySlug); // Add this line
 router.put("/:id", updateTeam);
-router.put("/slug/:slug", updateTeamBySlug); // Add this line
+router.put("/:slug", updateTeamBySlug); // Add this line
 router.delete("/:id", deleteTeam);
-router.delete("/slug/:slug", deleteTeamBySlug); // Add this line
+router.delete("/:slug", deleteTeamBySlug); // Add this line
 
 export default router;

@@ -15,10 +15,10 @@ const router = express.Router();
 router.post("/", createNation);
 router.get("/", getNations);
 router.get("/:id", getNationById);
-router.get("/slug/:slug", getNationBySlug);
+router.get("/:slug", getNationBySlug);
 router.put("/:id", updateNation);
-router.put("/slug/:slug", updateNationBySlug);
+router.put("/:slug", updateNationBySlug);
 router.delete("/:id", deleteNation);
-router.delete("/slug/:slug", deleteNationBySlug);
+router.delete("/:slug", deleteNationBySlug);
 
 export default router;
