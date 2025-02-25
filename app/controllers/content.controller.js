@@ -51,6 +51,9 @@ export const viewContent = async (req, res) => {
       await user.save();
     }
 
+    content.numOfViews = (content.numOfViews || 0) + 1;
+    await content.save();
+
     res.status(200).send({ message: "Content viewed successfully" });
   } catch (err) {
     console.error("Error during viewing content:", err);

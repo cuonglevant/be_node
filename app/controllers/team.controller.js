@@ -13,6 +13,7 @@ export const createTeam = async (req, res) => {
       media,
       player,
       nation,
+      flag,
     });
     await team.save();
     res.status(201).json(team);
@@ -29,7 +30,8 @@ export const getTeams = async (req, res) => {
       .populate("category")
       .populate("media")
       .populate("player")
-      .populate("nation");
+      .populate("nation")
+      .populate("flag");
     res.status(200).json(teams);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -44,7 +46,8 @@ export const getTeamById = async (req, res) => {
       .populate("category")
       .populate("media")
       .populate("player")
-      .populate("nation");
+      .populate("nation")
+      .populate("flag");
     if (!team) {
       return res.status(404).json({ message: "Team not found" });
     }
@@ -68,7 +71,8 @@ export const updateTeam = async (req, res) => {
       .populate("category")
       .populate("media")
       .populate("player")
-      .populate("nation");
+      .populate("nation")
+      .populate("flag");
     if (!team) {
       return res.status(404).json({ message: "Team not found" });
     }

@@ -3,8 +3,8 @@ import League from "../models/league.model.js";
 // Create a new league
 export const createLeague = async (req, res) => {
   try {
-    const { name, description, nation } = req.body;
-    const league = new League({ name, description, nation });
+    const { name, description, nation, matches } = req.body;
+    const league = new League({ name, description, nation, matches });
     await league.save();
     res.status(201).json(league);
   } catch (error) {
@@ -41,7 +41,7 @@ export const updateLeague = async (req, res) => {
     const { name, description, nation } = req.body;
     const league = await League.findByIdAndUpdate(
       req.params.id,
-      { name, description, nation },
+      { name, description, nation, matches },
       { new: true }
     );
     if (!league) {

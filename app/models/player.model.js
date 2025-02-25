@@ -7,6 +7,14 @@ const playerSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Team",
   },
+  image: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Media",
+  },
+  nation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Nation",
+  },
 });
 
 const Player = mongoose.model("Player", playerSchema);

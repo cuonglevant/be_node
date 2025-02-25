@@ -29,6 +29,7 @@ const teamSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Nation",
   },
+  flag: String,
 });
 
 const Team = mongoose.model("Team", teamSchema);

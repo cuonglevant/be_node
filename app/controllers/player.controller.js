@@ -4,7 +4,7 @@ import Player from "../models/player.model.js";
 export const createPlayer = async (req, res) => {
   try {
     const { name, position, team } = req.body;
-    const player = new Player({ name, position, team });
+    const player = new Player({ name, position, team, media, nation });
     await player.save();
     res.status(201).json(player);
   } catch (error) {
@@ -41,7 +41,7 @@ export const updatePlayer = async (req, res) => {
     const { name, position, team } = req.body;
     const player = await Player.findByIdAndUpdate(
       req.params.id,
-      { name, position, team },
+      { name, position, team, nation },
       { new: true }
     ).populate("team");
     if (!player) {

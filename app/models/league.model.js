@@ -7,6 +7,12 @@ const leagueSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Nation",
   },
+  matches: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Match",
+    },
+  ],
 });
 
 const League = mongoose.model("League", leagueSchema);
