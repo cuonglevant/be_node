@@ -39,6 +39,10 @@ const matchSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Content",
   },
+  views: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const Match = mongoose.model("Match", matchSchema);

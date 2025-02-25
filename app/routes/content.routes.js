@@ -17,12 +17,12 @@ const router = express.Router();
 
 router.post("/", verifyToken, createContent);
 router.get("/", getContents);
-router.get("/:date", getContentsByDate);
-router.get("/:id", getContentById);
+router.get("/date/:date", getContentsByDate);
+router.get("/id/:id", getContentById);
 router.get("/:slug", getContentBySlug);
-router.put("/:id", verifyToken, updateContent);
+router.put("/id/:id", verifyToken, updateContent);
 router.put("/:slug", verifyToken, updateContentBySlug);
-router.delete("/:id", verifyToken, deleteContent);
+router.delete("/id/:id", verifyToken, deleteContent);
 router.delete("/:slug", verifyToken, deleteContentBySlug);
 router.post("/view/:contentId", verifyToken, viewContent);
 

@@ -14,6 +14,7 @@ export const createMatch = async (req, res) => {
       score,
       status,
       content,
+      views,
     } = req.body;
     const slug = slugify(`${homeTeam} vs ${awayTeam}`, { lower: true });
     const newMatch = new Match({
@@ -27,6 +28,7 @@ export const createMatch = async (req, res) => {
       status,
       content,
       slug,
+      views,
     });
     await newMatch.save();
     res.status(201).json(newMatch);
@@ -114,6 +116,37 @@ export const getMatchBySlug = async (req, res) => {
     res.status(200).json(match);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+// View a match
+export const viewMatch = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const matchId = req.params.matchId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    const match = await Match.findById(matchId);
+    if (!match) {
+      return res.status(404).send({ message: "Match not found" });
+    }
+
+    if (!user.viewedMatches.includes(matchId)) {
+      user.viewedMatches.push(matchId);
+      await user.save();
+    }
+
+    match.views = (match.views || 0) + 1;
+    await match.save();
+
+    res.status(200).send({ message: "Match viewed successfully" });
+  } catch (err) {
+    console.error("Error during viewing match:", err);
+    res.status(500).send({ message: err.message });
   }
 };
 

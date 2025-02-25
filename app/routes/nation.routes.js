@@ -14,11 +14,11 @@ const router = express.Router();
 
 router.post("/", createNation);
 router.get("/", getNations);
-router.get("/:id", getNationById);
+router.get("/id/:id", getNationById);
 router.get("/:slug", getNationBySlug);
-router.put("/:id", updateNation);
+router.put("/id/:id", updateNation);
 router.put("/:slug", updateNationBySlug);
-router.delete("/:id", deleteNation);
+router.delete("/id/:id", deleteNation);
 router.delete("/:slug", deleteNationBySlug);
 
 export default router;

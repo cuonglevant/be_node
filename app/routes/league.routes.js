@@ -14,11 +14,11 @@ const router = express.Router();
 
 router.post("/", createLeague);
 router.get("/", getLeagues);
-router.get("/:id", getLeagueById);
+router.get("/id/:id", getLeagueById);
 router.get("/:slug", getLeagueBySlug);
-router.put("/:id", updateLeague);
+router.put("/id/:id", updateLeague);
 router.put("/:slug", updateLeagueBySlug);
-router.delete("/:id", deleteLeague);
+router.delete("/id/:id", deleteLeague);
 router.delete("/:slug", deleteLeagueBySlug);
 
 export default router;
