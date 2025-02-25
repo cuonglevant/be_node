@@ -14,4 +14,6 @@ export default function (app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
+
+  app.post("/view/:contentId", [authJwt.verifyToken], controller.viewContent);
 }

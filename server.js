@@ -3,14 +3,25 @@ import express from "express";
 import cors from "cors";
 import cookieSession from "cookie-session";
 import mongoose from "mongoose";
-import Role from "./app/models/role.model.js"; // Adjust the path as necessary
+import Role from "./app/models/role.model.js";
+
+// Import routes
+import authRoutes from "./app/routes/auth.routes.js";
+import userRoutes from "./app/routes/user.routes.js";
+import categoryRoutes from "./app/routes/category.routes.js";
+import contentRoutes from "./app/routes/content.routes.js";
+import mediaRoutes from "./app/routes/media.routes.js";
+import teamRoutes from "./app/routes/team.routes.js";
+import playerRoutes from "./app/routes/player.routes.js";
+import nationRoutes from "./app/routes/nation.routes.js";
+import leagueRoutes from "./app/routes/league.routes.js";
 
 dotenv.config();
 
 const app = express();
 
 const corsOptions = {
-  origin: true, // Replace with your frontend's origin
+  origin: true,
   credentials: true, // Allow credentials
   optionsSuccessStatus: 200,
   headers: {
@@ -28,7 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cookieSession({
     name: "cuonglevant-session",
-    secret: process.env.COOKIE_SECRET, // Ensure you have COOKIE_SECRET in your .env file
+    secret: process.env.COOKIE_SECRET,
     httpOnly: true,
   })
 );
@@ -51,22 +62,11 @@ mongoose
     process.exit();
   });
 
-// Import routes
-import authRoutes from "./app/routes/auth.routes.js";
-import userRoutes from "./app/routes/user.routes.js";
-import categoryRoutes from "./app/routes/category.routes.js";
-import contentRoutes from "./app/routes/content.routes.js";
-import mediaRoutes from "./app/routes/media.routes.js";
-import teamRoutes from "./app/routes/team.routes.js";
-import playerRoutes from "./app/routes/player.routes.js";
-import nationRoutes from "./app/routes/nation.routes.js";
-import leagueRoutes from "./app/routes/league.routes.js";
-
 // Use routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/category", categoryRoutes);
-app.use("/api/content", contentRoutes);
+app.use("/api/contents", contentRoutes);
 app.use("/api/media", mediaRoutes);
 app.use("/api/team", teamRoutes);
 app.use("/api/player", playerRoutes);
