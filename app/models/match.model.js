@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const matchSchema = new mongoose.Schema({
   date: Date,
+  slug: String,
   homeTeam: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Team",

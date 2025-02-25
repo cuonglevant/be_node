@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const teamSchema = new mongoose.Schema({
   name: String,
+  slug: String,
   description: String,
   league: {
     type: mongoose.Schema.Types.ObjectId,

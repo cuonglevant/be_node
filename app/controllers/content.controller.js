@@ -1,5 +1,6 @@
 import Content from "../models/content.model.js";
 import User from "../models/user.model.js";
+import slugify from "slugify";
 
 // Create a new content
 export const createContent = async (req, res) => {
@@ -14,8 +15,10 @@ export const createContent = async (req, res) => {
       category,
       numOfViews,
     } = req.body;
+    const slug = slugify(title, { lower: true });
     const newContent = new Content({
       title,
+      slug,
       content,
       publishDate,
       author,
@@ -75,10 +78,53 @@ export const getContents = async (req, res) => {
   }
 };
 
+// Get content by date
+export const getContentsByDate = async (req, res) => {
+  try {
+    const { date } = req.params;
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const contents = await Content.find({
+      publishDate: {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      },
+    })
+      .populate("author")
+      .populate("media")
+      .populate("category")
+      .populate("comment.author");
+
+    res.status(200).json(contents);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Get a single content by ID
 export const getContentById = async (req, res) => {
   try {
     const content = await Content.findById(req.params.id)
+      .populate("author")
+      .populate("media")
+      .populate("category")
+      .populate("comment.author");
+    if (!content) {
+      return res.status(404).json({ message: "Content not found" });
+    }
+    res.status(200).json(content);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get a single content by slug
+export const getContentBySlug = async (req, res) => {
+  try {
+    const content = await Content.findOne({ slug: req.params.slug })
       .populate("author")
       .populate("media")
       .populate("category")
@@ -132,10 +178,65 @@ export const updateContent = async (req, res) => {
   }
 };
 
+// Update a content by slug
+export const updateContentBySlug = async (req, res) => {
+  try {
+    const {
+      title,
+      content,
+      publishDate,
+      author,
+      media,
+      comment,
+      category,
+      numOfViews,
+    } = req.body;
+    const slug = slugify(title, { lower: true });
+    const updatedContent = await Content.findOneAndUpdate(
+      { slug: req.params.slug },
+      {
+        title,
+        slug,
+        content,
+        publishDate,
+        author,
+        media,
+        comment,
+        category,
+        numOfViews,
+      },
+      { new: true }
+    )
+      .populate("author")
+      .populate("media")
+      .populate("category")
+      .populate("comment.author");
+    if (!updatedContent) {
+      return res.status(404).json({ message: "Content not found" });
+    }
+    res.status(200).json(updatedContent);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Delete a content by ID
 export const deleteContent = async (req, res) => {
   try {
     const content = await Content.findByIdAndDelete(req.params.id);
+    if (!content) {
+      return res.status(404).json({ message: "Content not found" });
+    }
+    res.status(200).json({ message: "Content deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Delete a content by slug
+export const deleteContentBySlug = async (req, res) => {
+  try {
+    const content = await Content.findOneAndDelete({ slug: req.params.slug });
     if (!content) {
       return res.status(404).json({ message: "Content not found" });
     }
