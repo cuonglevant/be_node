@@ -8,13 +8,12 @@ const userSchema = new mongoose.Schema({
   phoneNumber: String,
   idCard: String,
   userImage: String,
-  roles: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Role",
-      nullables: true,
-    },
-  ],
+  roles: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Role",
+    nullables: true,
+  },
+
   viewedContent: [
     {
       type: mongoose.Schema.Types.ObjectId,

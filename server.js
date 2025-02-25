@@ -41,8 +41,6 @@ mongoose
   .connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    ssl: true,
-    tlsAllowInvalidCertificates: true,
   })
   .then(() => {
     console.log("Successfully connected to MongoDB.");
