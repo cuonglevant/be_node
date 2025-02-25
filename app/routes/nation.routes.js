@@ -9,10 +9,10 @@ import {
 
 const router = express.Router();
 
-router.post("/nations", createNation);
-router.get("/nations", getNations);
-router.get("/nations/:id", getNationById);
-router.put("/nations/:id", updateNation);
-router.delete("/nations/:id", deleteNation);
+router.post("/", createNation);
+router.get("/", getNations);
+router.get("/:id", getNationById);
+router.put("/:id", updateNation);
+router.delete("/:id", deleteNation);
 
 export default router;

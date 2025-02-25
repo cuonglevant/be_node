@@ -9,10 +9,10 @@ import {
 
 const router = express.Router();
 
-router.post("/leagues", createLeague);
-router.get("/leagues", getLeagues);
-router.get("/leagues/:id", getLeagueById);
-router.put("/leagues/:id", updateLeague);
-router.delete("/leagues/:id", deleteLeague);
+router.post("/", createLeague);
+router.get("/", getLeagues);
+router.get("/:id", getLeagueById);
+router.put("/:id", updateLeague);
+router.delete("/:id", deleteLeague);
 
 export default router;

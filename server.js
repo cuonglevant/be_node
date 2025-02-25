@@ -65,13 +65,13 @@ mongoose
 // Use routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/category", categoryRoutes);
+app.use("/api/categories", categoryRoutes);
 app.use("/api/contents", contentRoutes);
-app.use("/api/media", mediaRoutes);
-app.use("/api/team", teamRoutes);
-app.use("/api/player", playerRoutes);
-app.use("/api/nation", nationRoutes);
-app.use("/api/league", leagueRoutes);
+app.use("/api/medias", mediaRoutes);
+app.use("/api/teams", teamRoutes);
+app.use("/api/players", playerRoutes);
+app.use("/api/nations", nationRoutes);
+app.use("/api/leagues", leagueRoutes);
 
 // Set port, listen for requests
 const PORT = process.env.PORT || 8080;

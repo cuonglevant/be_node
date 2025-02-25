@@ -9,10 +9,10 @@ import {
 
 const router = express.Router();
 
-router.post("/teams", createTeam);
-router.get("/teams", getTeams);
-router.get("/teams/:id", getTeamById);
-router.put("/teams/:id", updateTeam);
-router.delete("/teams/:id", deleteTeam);
+router.post("/", createTeam);
+router.get("/", getTeams);
+router.get("/:id", getTeamById);
+router.put("/:id", updateTeam);
+router.delete("/:id", deleteTeam);
 
 export default router;

@@ -1,4 +1,5 @@
 import Content from "../models/content.model.js";
+import User from "../models/user.model.js";
 
 // Create a new content
 export const createContent = async (req, res) => {
@@ -32,7 +33,7 @@ export const createContent = async (req, res) => {
 
 export const viewContent = async (req, res) => {
   try {
-    const userId = req.userId; // Assuming you have middleware to set req.userId
+    const userId = req.userId;
     const contentId = req.params.contentId;
 
     const user = await User.findById(userId);
