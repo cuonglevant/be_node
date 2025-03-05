@@ -16,6 +16,7 @@ import playerRoutes from "./app/routes/player.routes.js";
 import nationRoutes from "./app/routes/nation.routes.js";
 import leagueRoutes from "./app/routes/league.routes.js";
 import matchRoutes from "./app/routes/match.routes.js";
+import standingRoutes from "./app/routes/standing.routes.js";
 
 dotenv.config();
 
@@ -74,6 +75,7 @@ app.use("/api/players", playerRoutes);
 app.use("/api/nations", nationRoutes);
 app.use("/api/leagues", leagueRoutes);
 app.use("/api/matches", matchRoutes);
+app.use("/api/standings", standingRoutes);
 
 // Set port, listen for requests
 const PORT = process.env.PORT || 8080;
